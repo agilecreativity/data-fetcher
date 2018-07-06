@@ -1,0 +1,58 @@
+** data-fetcher
+
+Simple library to automate download of resource files using Clojure.
+Intended to be used by Clojure binding of [[https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package][Apache MXNet]]
+
+*** API Provided
+
+| function             | Description                                                  |
+|----------------------+--------------------------------------------------------------|
+| download-file        | download file from a given url                               |
+| download-and-extract | download file from a given url and checking for file locally |
+
+*** Basic Usage
+
+Instead of writing this in shell script
+
+#+BEGIN_SRC sh
+set -evx
+mkdir -p data/mr-data
+cd data/mr-data
+wget https://raw.githubusercontent.com/yoonkim/CNN_sentence/master/rt-polarity.neg
+wget https://raw.githubusercontent.com/yoonkim/CNN_sentence/master/rt-polarity.pos
+cd ../..
+
+mkdir -p data/glove
+cd data/glove
+wget http://nlp.stanford.edu/data/glove.6B.zip
+unzip *.zip
+cd ../..
+#+END_SRC
+
+We should be able to get the same result using simple Clojure function.
+
+#+BEGIN_SRC clojure
+  (require '[data-fetcher.core :refer [download-and-extract]])
+
+  ;; Download multiple files
+  (doseq [file (seq ["rt-polarity.neg" "rt-polarity.pos"])]
+    (let [output-dir "data/mr-data"
+          url (format "https://raw.githubusercontent.com/yoonkim/CNN_sentence/master/%s" file)]
+      (download-and-extract url output-dir file)))
+
+  ;; Download a single file and check for content of the file, skip if we have already download once!
+  (let [url "http://nlp.stanford.edu/data/glove.6B.zip"
+        output-dir "data/glove"
+        sample-file "glove.6B.300d.txt"]
+    (download-and-extract url output-dir sample-file))
+#+END_SRC
+
+*** TODOs
+
+**** TODO: add more tests
+
+*** License
+
+Copyright © 2018 Burin Choomnuan
+
+Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
