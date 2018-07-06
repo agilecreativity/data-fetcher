@@ -31,3 +31,12 @@
 
 #_ (extract-file "~/Downloads/mnist-demo.zip"
                  "~/Downloads/TTTT")
+
+
+(def sample "https://github.com/apache/incubator-mxnet/blob/master/contrib/clojure-package/examples/cnn-text-classification/get_data.sh")
+
+(def neg-file "https://raw.githubusercontent.com/yoonkim/CNN_sentence/master/rt-polarity.neg")
+
+#_
+(spit "demo-xxx.txt" (slurp sample))
+(spit "neg-file.txt" (slurp neg-file))
