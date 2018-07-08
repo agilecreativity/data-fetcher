@@ -77,9 +77,20 @@
    (java.io.File. output-file)))
 
 #_ (copy-file "http://placehold.it/350x150" "testbed/aaa/test-file-1.gif")
-#_ (download-file "http://placehold.it/350x150" "testbed/aaa/test-file-1.gif")
+#_ (download-file "http://placehold.it/350x150" "~/testbed/aaa/test-file-1.gif")
 
 #_ (copy-file "http://placehold.it/350x150" "test-file-1.gif")
 #_ (copy-file "http://www.lisperati.com/lisplogo_256.png" "lisplogo_256.png")
 #_ (copy-file mnist-sample "mnist.zip")
 #_ (copy-binary-file neg-file "rt-polarity.neg")
+
+
+;; NOTE: simpler version of the download!
+(defn download-sample [uri file]
+  (with-open [in (io/input-stream uri)
+              out (io/output-stream file)]
+    (io/copy in out)))
+
+#_ (download-sample neg-file "rt-polarity.neg")
+
+#_ (download-sample mnist-sample "mnist.zip")
