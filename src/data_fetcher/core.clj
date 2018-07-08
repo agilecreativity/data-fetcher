@@ -68,7 +68,14 @@
 
 ;; https://stackoverflow.com/questions/11321264/saving-an-image-form-clj-http-request-to-file
 
-#_
-(clojure.java.io/copy
- (:body (client/get "http://placehold.it/350x150" {:as :stream}))
- (java.io.File. "test-file.gif"))
+;; (:body (client/get "http://placehold.it/350x150" {:as :stream}))
+
+(defn copy-binary-file
+  [url output-file]
+  (clojure.java.io/copy
+   (:body (client/get url {:as :stream}))
+   (java.io.File. output-file)))
+
+#_ (copy-binary-file "http://placehold.it/350x150" "test-file-1.gif")
+
+#_ (copy-binary-file "http://www.lisperati.com/lisplogo_256.png" "lisplogo_256.png")
