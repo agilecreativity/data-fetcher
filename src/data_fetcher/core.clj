@@ -44,8 +44,6 @@
 (spit "neg-file.txt" (slurp neg-file))
 
 ;; https://stackoverflow.com/questions/8281082/downloading-image-in-clojure
-#_
-(require '[clojure.java.io :as io])
 
 (defn blurp [f]
   (let [dest (java.io.ByteArrayOutputStream.)]
@@ -54,21 +52,15 @@
     (.toByteArray dest)))
 
 #_ (blurp "http://www.lisperati.com/lisplogo_256.png")
-
-#_
-(use 'clojure.test)
-
-#_
-(deftest blurp-test
-  (testing "basic operation"
-    (let [src (java.io.ByteArrayInputStream. (.getBytes "foo" "utf-8"))]
-      (is (= "foo" (-> (blurp src) (String. "utf-8")))))))
+#_ (use 'clojure.test)
+#_ (deftest blurp-test
+     (testing "basic operation"
+       (let [src (java.io.ByteArrayInputStream. (.getBytes "foo" "utf-8"))]
+         (is (= "foo" (-> (blurp src) (String. "utf-8")))))))
 
 #_ (blurp "http://www.lisperati.com/lisplogo_256.png")
 
 ;; https://stackoverflow.com/questions/11321264/saving-an-image-form-clj-http-request-to-file
-
-;; (:body (client/get "http://placehold.it/350x150" {:as :stream}))
 
 (defn copy-binary-file
   [url output-file]
@@ -77,5 +69,5 @@
    (java.io.File. output-file)))
 
 #_ (copy-binary-file "http://placehold.it/350x150" "test-file-1.gif")
-
 #_ (copy-binary-file "http://www.lisperati.com/lisplogo_256.png" "lisplogo_256.png")
+#_ (copy-binary-file mnist-sample "mnist.zip")
