@@ -3,10 +3,18 @@
    [me.raynes.fs.compression :as fsc]
    [me.raynes.fs :as fs]
    [clj-http.client :as client]
+   [clojure.java.shell :refer [sh]]
    [clojure.java.io :as io])
   (:import
    [org.apache.commons.io FileUtils]
    [java.net URL]))
+
+#_
+(def data-dir "data/")
+
+#_
+(when-not (.exists (io/file (str data-dir "train-images-idx3-ubyte")))
+  (sh "../../scripts/get_mnist_data.sh"))
 
 (def mnist-sample "https://s3.us-east-2.amazonaws.com/mxnet-scala/scala-example-ci/mnist/mnist.zip")
 
@@ -62,12 +70,13 @@
 
 ;; https://stackoverflow.com/questions/11321264/saving-an-image-form-clj-http-request-to-file
 
-(defn copy-binary-file
+(defn copy-file
   [url output-file]
   (clojure.java.io/copy
    (:body (client/get url {:as :stream}))
    (java.io.File. output-file)))
 
-#_ (copy-binary-file "http://placehold.it/350x150" "test-file-1.gif")
-#_ (copy-binary-file "http://www.lisperati.com/lisplogo_256.png" "lisplogo_256.png")
-#_ (copy-binary-file mnist-sample "mnist.zip")
+#_ (copy-file "http://placehold.it/350x150" "test-file-1.gif")
+#_ (copy-file "http://www.lisperati.com/lisplogo_256.png" "lisplogo_256.png")
+#_ (copy-file mnist-sample "mnist.zip")
+#_ (copy-binary-file neg-file "rt-polarity.neg")
