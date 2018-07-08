@@ -28,9 +28,20 @@
       (println "File already exist locally, will be skipped."))))
 
 ;; Note: the directory will be created automatically!
-#_ (download-file mnist-sample
-                  "/Users/bchoomnu/Downloads/zzzz/mnist-demo.zip")
+#_ (download-file mnist-sample "/Users/bchoomnu/Downloads/zzzz/mnist-demo.zip")
 
+;; TODO: cleanup and adjust the api
+(defn download-if-not-exist
+  [url]
+  (let [output-dir "data"
+        sample-file (str/join java.io.File/separator [output-dir "train-images-idx3-ubyte"])
+        output-file (str/join java.io.File/separator [output-dir "mnist.zip"])]
+    (when-not (.exists (io/file sample-file))
+      (println (format "File %s not exist locally, will be downloaded." sample-file))
+      (download-file url output-file)
+      (when (.endsWith output-file ".zip")
+        (println (format "Extract %s to directory %s" output-file output-dir))
+        (extract-file output-file output-dir)))))
 
 ;; TODO: handle different type of input e.g.
 ;; .tar.gz as well as .zip or .rar, etc!
