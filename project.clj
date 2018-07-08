@@ -6,4 +6,5 @@
   :plugins [[lein-cljfmt "0.5.7"]]
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [commons-io/commons-io "2.6"]
+                 [clj-http "3.9.0"]
                  [akvo/fs "20180618-165206.5f3fb50b"] ])

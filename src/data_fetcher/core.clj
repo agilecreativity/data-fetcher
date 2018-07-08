@@ -1,7 +1,9 @@
 (ns data-fetcher.core
   (:require
    [me.raynes.fs.compression :as fsc]
-   [me.raynes.fs :as fs])
+   [me.raynes.fs :as fs]
+   [clj-http.client :as client]
+   [clojure.java.io :as io])
   (:import
    [org.apache.commons.io FileUtils]
    [java.net URL]))
@@ -32,11 +34,41 @@
 #_ (extract-file "~/Downloads/mnist-demo.zip"
                  "~/Downloads/TTTT")
 
-
 (def sample "https://github.com/apache/incubator-mxnet/blob/master/contrib/clojure-package/examples/cnn-text-classification/get_data.sh")
 
 (def neg-file "https://raw.githubusercontent.com/yoonkim/CNN_sentence/master/rt-polarity.neg")
 
 #_
 (spit "demo-xxx.txt" (slurp sample))
+
 (spit "neg-file.txt" (slurp neg-file))
+
+;; https://stackoverflow.com/questions/8281082/downloading-image-in-clojure
+#_
+(require '[clojure.java.io :as io])
+
+(defn blurp [f]
+  (let [dest (java.io.ByteArrayOutputStream.)]
+    (with-open [src (io/input-stream f)]
+      (io/copy src dest))
+    (.toByteArray dest)))
+
+#_ (blurp "http://www.lisperati.com/lisplogo_256.png")
+
+#_
+(use 'clojure.test)
+
+#_
+(deftest blurp-test
+  (testing "basic operation"
+    (let [src (java.io.ByteArrayInputStream. (.getBytes "foo" "utf-8"))]
+      (is (= "foo" (-> (blurp src) (String. "utf-8")))))))
+
+#_ (blurp "http://www.lisperati.com/lisplogo_256.png")
+
+;; https://stackoverflow.com/questions/11321264/saving-an-image-form-clj-http-request-to-file
+
+#_
+(clojure.java.io/copy
+ (:body (client/get "http://placehold.it/350x150" {:as :stream}))
+ (java.io.File. "test-file.gif"))
