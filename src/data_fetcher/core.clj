@@ -9,12 +9,14 @@
    [org.apache.commons.io FileUtils]
    [java.net URL]))
 
-#_
-(def data-dir "data/")
+;; TODO: handle different type of input e.g.
+;; .tar.gz as well as .zip or .rar, etc!
+(defn extract-file
+  [input-file output-dir]
+  (fsc/unzip (fs/expand-home input-file)
+             (fs/expand-home output-dir)))
 
-#_
-(when-not (.exists (io/file (str data-dir "train-images-idx3-ubyte")))
-  (sh "../../scripts/get_mnist_data.sh"))
+#_ (extract-file "~/Downloads/mnist-demo.zip" "~/Downloads/TTTT")
 
 (def mnist-sample "https://s3.us-east-2.amazonaws.com/mxnet-scala/scala-example-ci/mnist/mnist.zip")
 
@@ -31,6 +33,7 @@
 #_ (download-file mnist-sample "/Users/bchoomnu/Downloads/zzzz/mnist-demo.zip")
 
 ;; TODO: cleanup and adjust the api
+;; - split into two, download-if-not-exist without extraction
 (defn download-if-not-exist
   [url]
   (let [output-dir "data"
@@ -43,32 +46,22 @@
         (println (format "Extract %s to directory %s" output-file output-dir))
         (extract-file output-file output-dir)))))
 
-;; TODO: handle different type of input e.g.
-;; .tar.gz as well as .zip or .rar, etc!
-(defn extract-file
-  [input-file output-dir]
-  (fsc/unzip (fs/expand-home input-file)
-             (fs/expand-home output-dir)))
 
-#_ (extract-file "~/Downloads/mnist-demo.zip"
-                 "~/Downloads/TTTT")
+
+;; ======================== ;;
+;; Move this to scratch-library for later re-use!
+
 
 (def sample "https://github.com/apache/incubator-mxnet/blob/master/contrib/clojure-package/examples/cnn-text-classification/get_data.sh")
-
 (def neg-file "https://raw.githubusercontent.com/yoonkim/CNN_sentence/master/rt-polarity.neg")
 
-#_
-(spit "demo-xxx.txt" (slurp sample))
-
-(spit "neg-file.txt" (slurp neg-file))
-
 ;; https://stackoverflow.com/questions/8281082/downloading-image-in-clojure
-
 (defn blurp [f]
   (let [dest (java.io.ByteArrayOutputStream.)]
     (with-open [src (io/input-stream f)]
       (io/copy src dest))
     (.toByteArray dest)))
+
 
 #_ (blurp "http://www.lisperati.com/lisplogo_256.png")
 #_ (use 'clojure.test)
@@ -78,7 +71,6 @@
          (is (= "foo" (-> (blurp src) (String. "utf-8")))))))
 
 #_ (blurp "http://www.lisperati.com/lisplogo_256.png")
-
 ;; https://stackoverflow.com/questions/11321264/saving-an-image-form-clj-http-request-to-file
 
 (defn copy-file
@@ -95,7 +87,6 @@
 #_ (copy-file mnist-sample "mnist.zip")
 #_ (copy-binary-file neg-file "rt-polarity.neg")
 
-
 ;; NOTE: simpler version of the download!
 (defn download-sample [uri file]
   (with-open [in (io/input-stream uri)
@@ -103,5 +94,4 @@
     (io/copy in out)))
 
 #_ (download-sample neg-file "rt-polarity.neg")
-
 #_ (download-sample mnist-sample "mnist.zip")
