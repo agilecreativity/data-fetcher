@@ -76,6 +76,9 @@
    (:body (client/get url {:as :stream}))
    (java.io.File. output-file)))
 
+#_ (copy-file "http://placehold.it/350x150" "testbed/aaa/test-file-1.gif")
+#_ (download-file "http://placehold.it/350x150" "testbed/aaa/test-file-1.gif")
+
 #_ (copy-file "http://placehold.it/350x150" "test-file-1.gif")
 #_ (copy-file "http://www.lisperati.com/lisplogo_256.png" "lisplogo_256.png")
 #_ (copy-file mnist-sample "mnist.zip")
