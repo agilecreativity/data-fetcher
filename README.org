@@ -1,5 +1,8 @@
 ** data-fetcher
 
+[[https://clojars.org/data-fetcher][https://img.shields.io/clojars/v/data-fetcher.svg]]
+[[https://jarkeeper.com/agilecreativity/data-fetcher][https://jarkeeper.com/agilecreativity/data-fetcher/status.svg]]
+
 Simple library to automate download of resource files using Clojure.
 Intended to be used by Clojure binding of [[https://github.com/apache/incubator-mxnet/tree/master/contrib/clojure-package][Apache MXNet]]
 
